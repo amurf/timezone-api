@@ -16,12 +16,12 @@ custom.refiners.push(CityRefiner);
 
 fastify.register(require('fastify-cors'), {
   origin: (origin, cb) => {
-   if(/localhost/.test(origin)){
+   //if(/localhost/.test(origin)){
     //  Request from localhost will pass
     cb(null, true)
     return
-  }
-  cb(new Error("Not allowed"), false)
+  //}
+  //cb(new Error("Not allowed"), false)
   }
 });
 
