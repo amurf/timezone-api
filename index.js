@@ -42,30 +42,17 @@ fastify.get('/', function (request, reply) {
 
   const dateObj    = parsedDate[0].start;
   const timezone = dateObj.get('timezone') || dateObj.get('timezoneAbbr');
-
-
-  const userTimezone = request.query.tz;
-
-  const dateString = moment(dateObj.date()).tz(timezone, true).format();
-
-  const converted =
-    moment(dateString).tz(userTimezone);
-
-  if (!converted) {
-    return reply.send({ valid: false });
-  }
+  const date = moment(dateObj.date()).tz(timezone, true).tz('UTC');
 
   reply.send({
-    date: dateString,
+    utc_date: date,
     timezone: timezone,
-
-    user_date: converted.format(),
-    from_now: converted.fromNow(),
+    from_now: date.fromNow(),
 
     user_timezone: request.query.tz,
     input: request.query.date,
 
-    valid: converted.isValid(),
+    valid: date.isValid(),
   });
 
 })
