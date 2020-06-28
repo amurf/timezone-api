@@ -57,8 +57,10 @@ fastify.get('/', function (request, reply) {
 
 })
 
+
+const port = process.env.PORT || 3000;
 // Run the server!
-fastify.listen(3000, function (err, address) {
+fastify.listen(port, function (err, address) {
   if (err) {
     fastify.log.error(err)
     process.exit(1)
