@@ -30,17 +30,30 @@ fastify.register(require('fastify-cors'), {
 // this should accept a user tz as well to convert to
 fastify.get('/', function (request, reply) {
   const parsedDate = custom.parse(request.query.date);
+
+  // XXX: obviously temporary!
+  if (!request.query.tz || !request.query.date) {
+    return reply.send({ valid: false });
+  }
+
+  if (!parsedDate[0]) {
+    return reply.send({ valid: false });
+  }
+
   const dateObj    = parsedDate[0].start;
   const timezone = dateObj.get('timezone') || dateObj.get('timezoneAbbr');
 
 
   const userTimezone = request.query.tz;
 
-  console.log(dateObj);
   const dateString = moment(dateObj.date()).tz(timezone, true).format();
 
   const converted =
     moment(dateString).tz(userTimezone);
+
+  if (!converted) {
+    return reply.send({ valid: false });
+  }
 
   reply.send({
     date: dateString,
